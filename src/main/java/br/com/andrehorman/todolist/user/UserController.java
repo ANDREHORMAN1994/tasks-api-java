@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.andrehorman.todolist.utils.ErrorMessage;
 
 /*
@@ -27,12 +28,17 @@ public class UserController {
   @PostMapping("/create")
   public ResponseEntity<?> create(@RequestBody UserModel userModel) {
     var userName = userModel.getUsername();
+    var password = userModel.getPassword();
     var userExists = this.userRepository.findByUsername(userName);
 
     if (userExists != null) {
       var message = new ErrorMessage("Usuário já existe");
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
+
+    var passwordHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+    userModel.setPassword(passwordHash);
+
     var userCreated = this.userRepository.save(userModel);
     return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
   }

@@ -15,6 +15,7 @@ Principais tecnologias utilizadas no projeto
 * [Project Lombok](https://projectlombok.org/)
 * [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
 * [H2 Database](https://www.h2database.com/html/main.html)
+* [Bcrypt Java](https://github.com/patrickfav/bcrypt)
 
 
 ### Documentação
