@@ -17,7 +17,7 @@ import lombok.Data;
 @Entity(name = "tb_users")
 public class UserModel {
   
-  @Id
+  @Id // Define o campo como chave primária
   @GeneratedValue(generator = "UUID")
   private UUID id;
 
