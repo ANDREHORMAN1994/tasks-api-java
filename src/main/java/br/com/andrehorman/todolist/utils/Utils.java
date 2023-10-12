@@ -11,6 +11,7 @@ import org.springframework.beans.BeanWrapperImpl;
 public class Utils {
 
   public static void copyNonNullProperties(Object source, Object target) {
+    // Copia os atributos não nulos de um objeto para outro
     BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
   }
   
