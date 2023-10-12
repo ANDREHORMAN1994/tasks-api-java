@@ -27,42 +27,47 @@ public class FilterTaskAuth extends OncePerRequestFilter {
       HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
-    // PEGAR A AUTENTICAÇÃO DO HEADER
-    var auth = request.getHeader("Authorization");
-    var token = auth.substring("Basic".length()).trim();
+    var servletPath = request.getServletPath();
 
-    System.out.println(
-      String.format("Token: %s", token)
-    );
+    if (servletPath.startsWith("/tasks") && !servletPath.equals("/tasks/all")) {
 
-    // DESCRIPTOGRAFANDO INFORMAÇÕES DO TOKEN
-    byte[] decodedToken = Base64.getDecoder().decode(token);
-    var infos = new String(decodedToken);
-    String username = infos.split(":")[0];
-    String password = infos.split(":")[1];
+      // PEGAR A AUTENTICAÇÃO DO HEADER
+      var auth = request.getHeader("Authorization");
+      var token = auth.substring("Basic".length()).trim();
 
-    System.out.println(
-      "Username: " + username + "\n" +
-      "Password: " + password
-    );
+      System.out.println(String.format("Token: %s", token));
 
-    // VALIDAR USUÁRIO E SENHA
-    UserModel user = this.userRepository.findByUsername(username);
-    
-    if (user == null) {
-      response.sendError(401, "Usuário não existe!");
-    } else {
-      var result = BCrypt
-        .verifyer()
-        .verify(password.toCharArray(), user.getPassword());
-      
-      if (!result.verified) {
-        response.sendError(401, "Senha inválida!");
+      // DESCRIPTOGRAFANDO INFORMAÇÕES DO TOKEN
+      byte[] decodedToken = Base64.getDecoder().decode(token);
+      var infos = new String(decodedToken);
+      String username = infos.split(":")[0];
+      String password = infos.split(":")[1];
+
+      System.out.println("Username: " + username + "\n" + "Password: " + password);
+
+      // VALIDAR USUÁRIO E SENHA
+      UserModel user = this.userRepository.findByUsername(username);
+
+      if (user == null) {
+        response.sendError(401, "Usuário não existe!");
+      } else {
+        var result = BCrypt
+            .verifyer()
+            .verify(password.toCharArray(), user.getPassword());
+
+        if (result.verified) {
+          request.setAttribute("idUser", user.getId());
+
+          // CONTINUAR A EXECUÇÃO DA REQUISIÇÃO
+          filterChain.doFilter(request, response);
+        } else {
+          response.sendError(401, "Senha inválida!");
+        }
       }
+    } else {
+      // CONTINUAR A EXECUÇÃO DA REQUISIÇÃO
+      filterChain.doFilter(request, response);
     }
-
-
-    filterChain.doFilter(request, response);
   }
 
 }
