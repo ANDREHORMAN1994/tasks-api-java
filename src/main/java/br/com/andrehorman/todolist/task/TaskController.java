@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
-  
+
   @Autowired
   private ITaskRepository taskRepository;
 
@@ -63,13 +63,27 @@ public class TaskController {
   }
 
   @PutMapping("/{idTask}")
-  public TaskModel update(@RequestBody TaskModel taskModel, @PathVariable UUID idTask, HttpServletRequest request) {
-
+  public ResponseEntity<?> update(
+      @RequestBody TaskModel taskModel,
+      @PathVariable UUID idTask,
+      HttpServletRequest request) {
+    var idUser = request.getAttribute("idUser");
     var task = this.taskRepository.findById(idTask).orElse(null);
 
-    Utils.copyNonNullProperties(taskModel, task);
+    if (task == null) {
+      var message = new ErrorMessage("Tarefa não encontrada!");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
 
-    return this.taskRepository.save(task);
+    System.out.println(task.getIdUser() + " " + idUser);
+    if (!task.getIdUser().equals(idUser)) {
+      var message = new ErrorMessage("Você não tem permissão para alterar essa tarefa!");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
+    }
+
+    Utils.copyNonNullProperties(taskModel, task);
+    var updatedTask = this.taskRepository.save(task);
+    return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
   }
 
 }
