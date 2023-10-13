@@ -1,10 +1,13 @@
 # TODO LIST JAVA
 
- - Console do [Banco H2](http://localhost:8080/h2-console/login.jsp?jsessionid=4bf1d0ac053d3554d4039c013a0e6305)
- - JDBC URL: `jdbc:h2:mem:todolist`
- - Usuário: `admin`
- - Senha: `admin`
+* Console do [Banco H2](http://localhost:8080/h2-console/login.jsp?jsessionid=4bf1d0ac053d3554d4039c013a0e6305)
+* JDBC URL: `jdbc:h2:mem:todolist`
+* Usuário: `admin`
+* Senha: `admin`
 
+### Comandos
+
+* Rodar Aplicação:  `mvn spring-boot:run`
 
 ### Tecnologias
 Principais tecnologias utilizadas no projeto
