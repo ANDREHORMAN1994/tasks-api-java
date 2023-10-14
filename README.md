@@ -1,15 +1,216 @@
-# TODO LIST JAVA
+<h1 align="center">
+  <p>TASKS API ☕</p>
+  <p>Java | Spring Boot | H2 Database</p>
+</h1>
 
-* Console do [Banco H2](http://localhost:8080/h2-console/login.jsp?jsessionid=4bf1d0ac053d3554d4039c013a0e6305)
+<p align="center">
+  <a href="#sobre-wave">Sobre</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#como-usar-rocket">Como Usar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#funcionalidades-star">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#tecnologias-man_technologist">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#documentação-book">Documentação</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="https://todolist-java-ypkr.onrender.com/tasks/all" target="_blank">Aplicação no Render</a>
+</p>
+<br/>
+
+
+## Sobre :wave:
+
+A `Tasks API` é uma API RESTful criada para simplificar o gerenciamento de tarefas. Com ela é possível realizar o cadastro de usuários e realizar o **CRUD** das tarefas, sendo possível criar, editar, excluir e listar tarefas de acordo com cada usuário autenticado e autorizado. Foi desenvolvida utilizando Java, Maven, Spring Boot e H2 Database como banco de dados em memória.
+
+
+## Como Usar :rocket:
+
+Para rodar a aplicação rode o comando:
+
+```bash
+mvn spring-boot:run
+```
+
+Para acessar as informações no Banco de Dados acesse o link abaixo:
+
+```bash
+http://localhost:8080/h2-console/login.jsp?jsessionid=4bf1d0ac053d3554d4039c013a0e6305
+```
+
+Utilize as informações abaixo para ter acesso:
+
 * JDBC URL: `jdbc:h2:mem:todolist`
 * Usuário: `admin`
 * Senha: `admin`
 
-### Comandos
 
-* Rodar Aplicação:  `mvn spring-boot:run`
+## Funcionalidades :star:
 
-### Tecnologias
+A Tasks API trabalha em cima de duas Tabelas do H2:
+
+ - `Users`
+ - `Tasks`
+
+Em relação ao `Users`, é possível acessar a rota:
+
+ - `POST /users/create`
+ > Cria um novo usuário com os dados fornecidos no corpo da requisição, verifica se o email do usuário já existe no banco de dados, realiza a criptografia da senha do usuário.
+
+```BASH
+// Exemplo de acesso para a rota POST /users/create
+
+https://todolist-java-ypkr.onrender.com/users/create
+```
+
+<details>
+  <summary>Exemplo de Resposta</summary>
+
+```javascript
+{
+  "id": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+  "username": "hormandev",
+  "name": "André Horman",
+  "password": "$2a$12$Fu1zwPvszgvy5My37kv9OOfrYI7pW5vaUIfhIiC3fuYzMctTAr7Hm",
+  "createdAt": "2023-10-14T01:48:57.067647"
+}
+```
+
+</details>
+
+
+Em relação ao `Tasks`, é possível acessar as seguintes rotas:
+
+ - `POST /tasks/create`
+ > Cria uma nova tarefa com os dados fornecidos no corpo da requisição, valida se o usuário é autenticado de acordo com o Username e o Password cadastrado.
+
+```BASH
+// Exemplo de acesso para a rota POST /tasks/create
+
+https://todolist-java-ypkr.onrender.com/tasks/create
+```
+
+<details>
+  <summary>Exemplo de Resposta</summary>
+
+```javascript
+{
+  "id": "b895e822-36ed-42d3-9005-9c4357569a08",
+  "idUser": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+  "title": "Aprender Java",
+  "description": "Gerenciador de tarefas criado com Java + Spring Boot",
+  "priority": "Alta",
+  "startAt": "2023-10-14T12:30:00",
+  "endAt": "2023-10-14T13:45:00",
+  "createdAt": "2023-10-14T01:58:57.958766"
+}
+```
+
+</details>
+
+ - `GET /tasks/all`
+ > Retorna uma lista com todas as tarefas cadastradas.
+
+```BASH
+// Exemplo de acesso para a rota GET /tasks/all
+
+https://todolist-java-ypkr.onrender.com/tasks/all
+```
+
+<details>
+  <summary>Exemplo de Resposta</summary>
+
+```javascript
+[
+  {
+    "id": "b895e822-36ed-42d3-9005-9c4357569a08",
+    "idUser": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+    "title": "Aprender Java",
+    "description": "Gerenciador de tarefas criado com Java + Spring Boot",
+    "priority": "Alta",
+    "startAt": "2023-10-14T12:30:00",
+    "endAt": "2023-10-14T13:45:00",
+    "createdAt": "2023-10-14T01:58:57.958766"
+  },
+  {
+    "id": "6fa479d0-ce09-42a2-b5b9-a24718b64fd5",
+    "idUser": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+    "title": "Criar Documentação",
+    "description": "Descrever todas as Rotas cadastradas na Tasks API",
+    "priority": "Alta",
+    "startAt": "2023-10-14T12:30:00",
+    "endAt": "2023-10-14T13:45:00",
+    "createdAt": "2023-10-14T02:01:50.555669"
+  }
+]
+```
+
+</details>
+
+ - `GET /tasks/all-user`
+ > Retorna uma lista com todas as tarefas cadastradas de acordo com o usuário autenticado.
+
+```BASH
+// Exemplo de acesso para a rota GET /tasks/all-user
+
+https://todolist-java-ypkr.onrender.com/tasks/all-user
+```
+
+<details>
+  <summary>Exemplo de Resposta</summary>
+
+```javascript
+[
+  {
+    "id": "b895e822-36ed-42d3-9005-9c4357569a08",
+    "idUser": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+    "title": "Aprender Java",
+    "description": "Gerenciador de tarefas criado com Java + Spring Boot",
+    "priority": "Alta",
+    "startAt": "2023-10-14T12:30:00",
+    "endAt": "2023-10-14T13:45:00",
+    "createdAt": "2023-10-14T01:58:57.958766"
+  },
+  {
+    "id": "6fa479d0-ce09-42a2-b5b9-a24718b64fd5",
+    "idUser": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+    "title": "Criar Documentação",
+    "description": "Descrever todas as Rotas cadastradas na Tasks API",
+    "priority": "Alta",
+    "startAt": "2023-10-14T12:30:00",
+    "endAt": "2023-10-14T13:45:00",
+    "createdAt": "2023-10-14T02:01:50.555669"
+  }
+]
+```
+
+</details>
+
+ - `PUT /tasks/{idTask}`
+ > Retorna as informações atualizadas da tarefa, valida se o id é passado como parâmetro na rota e se a tarefa pertence ao usuário autenticado.
+
+```BASH
+// Exemplo de acesso para a rota PUT /tasks/{idTask}
+
+https://todolist-java-ypkr.onrender.com/tasks/b895e822-36ed-42d3-9005-9c4357569a08
+```
+
+<details>
+  <summary>Exemplo de Resposta</summary>
+
+```javascript
+{
+  "id": "b895e822-36ed-42d3-9005-9c4357569a08",
+  "idUser": "7adfeab0-2b75-4da3-9c2a-8392576013ea",
+  "title": "TESTE",
+  "description": "XABLAU",
+  "priority": "Alta",
+  "startAt": "2023-10-14T12:30:00",
+  "endAt": "2023-10-14T13:45:00",
+  "createdAt": "2023-10-14T01:58:57.958766"
+}
+```
+
+</details>
+
+
+## Tecnologias :man_technologist:
+
 Principais tecnologias utilizadas no projeto
 
 * [Spring Initializr](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.1.4&packaging=jar&jvmVersion=17&groupId=br.com.andrehorman&artifactId=todolist&name=todolist&description=Gerenciador%20de%20tarefas&packageName=br.com.andrehorman.todolist&dependencies=web,devtools,lombok,data-jpa,h2)
@@ -21,7 +222,8 @@ Principais tecnologias utilizadas no projeto
 * [Bcrypt Java](https://github.com/patrickfav/bcrypt)
 
 
-### Documentação
+## Documentação :book:
+
 Guias de como utilizar algumas features de forma concreta:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
