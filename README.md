@@ -27,11 +27,8 @@ Para rodar a aplicação rode o comando:
 mvn spring-boot:run
 ```
 
-Para acessar as informações no Banco de Dados acesse o link abaixo:
+Para acessar as informações no Banco de Dados acesse o [Link](http://localhost:8080/h2-console/login.jsp?jsessionid=4bf1d0ac053d3554d4039c013a0e6305)
 
-```bash
-http://localhost:8080/h2-console/login.jsp?jsessionid=4bf1d0ac053d3554d4039c013a0e6305
-```
 
 Utilize as informações abaixo para ter acesso:
 
