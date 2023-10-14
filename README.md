@@ -21,7 +21,7 @@ A `Tasks API` é uma API RESTful criada para simplificar o gerenciamento de tare
 
 ## Como Usar :rocket:
 
-Para rodar a aplicação rode o comando:
+Primeiro rode o servidor da aplicação com o comando:
 
 ```bash
 mvn spring-boot:run
